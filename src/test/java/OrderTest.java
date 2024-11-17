@@ -1,15 +1,13 @@
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.After;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import pageobject.MainPage;
 import pageobject.OrderPage;
 
-import java.util.concurrent.TimeUnit;
 
 @RunWith(Parameterized.class)
 
@@ -27,12 +25,8 @@ public class OrderTest {
     private final String rentalPeriod;
 
 
-    @BeforeClass
-    public static void beforeClass() {
-        //WebDriverManager.firefoxdriver().setup();
-    }
-
-    public OrderTest(int indexButton, String firstName, String lastName, String address, String metroStation, String phoneNumber, String deliveryDate, String rentalPeriod) {
+    public OrderTest(int indexButton, String firstName, String lastName, String address,
+                     String metroStation, String phoneNumber, String deliveryDate, String rentalPeriod) {
         this.indexButton = indexButton;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -41,7 +35,7 @@ public class OrderTest {
         this.phoneNumber = phoneNumber;
         this.deliveryDate = deliveryDate;
         this.rentalPeriod = rentalPeriod;
-        driver = new ChromeDriver();
+        driver = new FirefoxDriver();
     }
 
     @Parameterized.Parameters
@@ -62,6 +56,7 @@ public class OrderTest {
         objOrderPage.setFormForWhom(firstName, lastName, address, metroStation, phoneNumber);
         objOrderPage.setFormAboutRent(deliveryDate, rentalPeriod);
         objOrderPage.waitLoadModalOrderOk();
+
 
     }
     @After
