@@ -54,7 +54,6 @@ public class OrderTest {
 
     @Test
     public void orderTest() {
-        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
         driver.get("https://qa-scooter.praktikum-services.ru/");
         MainPage objMainPage = new MainPage(driver);
         objMainPage.clickButtonAcceptCoockie();
