@@ -2,62 +2,73 @@ package pageobject;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.JavascriptExecutor;
 
 public class MainPage {
-    private WebDriver driver;
-    //верхняя кнопка заказа
-    private By topOrderButton = By.className("Button_Button__ra12g");
-    //нижняя кнопка заказа
-    private By bottonOrderButton = By.className("Button_Button__ra12g Button_Middle__1CSJM");
-    //логотип самоката
-    private By logoScooter = By.className("Header_LogoScooter__3lsAR");
-    //логотип яндекса
-    private By logoYandex = By.className("Header_LogoYandex__3TSOI");
-    //блок с вопросами
-    private By sectionFaq = By.className("Home_FAQ__3uVm4");
-    //вопросы
-    private By question1 = By.id("accordion__heading-8");
-    private By question2 = By.id("accordion__heading-9");
-    private By question3 = By.id("accordion__heading-10");
-    private By question4 = By.id("accordion__heading-11");
-    private By question5 = By.id("accordion__heading-12");
-    private By question6 = By.id("accordion__heading-13");
-    private By question7 = By.id("accordion__heading-14");
-    private By question8 = By.id("accordion__heading-15");
-    // ответы
-    private By answer1 = By.xpath(".//div[@id='accordion__panel-8']/p");
-    private By answer2 = By.xpath(".//div[@id='accordion__panel-9']/p");
-    private By answer3 = By.xpath(".//div[@id='accordion__panel-10']/p");
-    private By answer4 = By.xpath(".//div[@id='accordion__panel-11']/p");
-    private By answer5 = By.xpath(".//div[@id='accordion__panel-12']/p");
-    private By answer6 = By.xpath(".//div[@id='accordion__panel-13']/p");
-    private By answer7 = By.xpath(".//div[@id='accordion__panel-14']/p");
-    private By answer8 = By.xpath(".//div[@id='accordion__panel-15']/p");
+
+    private  WebDriver driver;
+
+        //верхняя кнопка заказа
+    private final By topOrderButton = By.className("Button_Button__ra12g");
+        //нижняя кнопка заказа
+    private final By bottonOrderButton = By.xpath(".//div[contains(@class,'FinishButton')]//button[text()='Заказать']");
+        //логотип самоката
+    private final By logoScooter = By.className("Header_LogoScooter__3lsAR");
+        //логотип яндекса
+    private final By logoYandex = By.className("Header_LogoYandex__3TSOI");
+        //блок с вопросами
+    private final By sectionFaq = By.xpath(".//div[@data-accordion-component='Accordion']");
+        //вопросы
+    private String question = ".//div[@id='accordion__heading-%d']";     //accordion__heading-0
+        //ответы
+    private String answer = ".//div[@id='accordion__panel-%d']";
+        //кнопка согласия использования куки
+    private final By buttonAcceptCoockie = By.id("rcc-confirm-button");
+
 
     public MainPage(WebDriver driver){
         this.driver = driver;
     }
-    //нажать верхнюю кнопку Заказать
-    public void clickTopOrderButton() {
-        driver.findElement(topOrderButton).click();
+
+        //соглашаемся с использованием кук
+    public void clickButtonAcceptCoockie() {
+        driver.findElement(buttonAcceptCoockie).click();
     }
-    //нажать нижнюю кнопку Заказать
-    public void clickBottonOrderButton() {
-        driver.findElement(bottonOrderButton).click();
+        //скролл до блока с вопросами
+    public void goToFaq () {
+        ((JavascriptExecutor)driver).executeScript("arguments[0].scrollIntoView();",driver.findElement(sectionFaq));
     }
-    //нажать на логотип самоката
+        //клик по стрелочке
+    public void clickQuestion(int itemIndex) {
+        driver.findElement(By.xpath(String.format(question, itemIndex))).click();
+    }
+        //получение текста ответа
+    public String getAnswer(int itemIndex) {
+        return driver.findElement(By.xpath(String.format(answer, itemIndex))).getText();
+    }
+
+       //нажать верхнюю или нижнюю кнопку Заказать
+    public void clickOrderButton(int indexButton) {
+        switch (indexButton) {
+            case 0:
+                driver.findElement(topOrderButton).click();
+                break;
+            case 1:
+                ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView();", driver.findElement(bottonOrderButton));
+                driver.findElement(bottonOrderButton).click();
+                break;
+        }
+    }
+
+       //клик по логотипу самоката
     public void clickLogoScooter() {
         driver.findElement(logoScooter).click();
     }
-    //нажать на логотип яндекса
+       //клик по логотипу яндекса
     public void clickLogoYandex() {
         driver.findElement(logoYandex).click();
     }
-    //ожидание загрузки блока с вопросами
-    public void waitForLoadSectionFaq() {
-        new WebDriverWait(driver,10).until(ExpectedConditions.visibilityOfElementLocated(sectionFaq));
-    }
+
+
 
 }
