@@ -35,7 +35,7 @@ public class OrderTest {
         this.phoneNumber = phoneNumber;
         this.deliveryDate = deliveryDate;
         this.rentalPeriod = rentalPeriod;
-        driver = new FirefoxDriver();
+        driver = new ChromeDriver();
     }
 
     @Parameterized.Parameters
