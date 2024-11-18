@@ -3,10 +3,14 @@ package pageobject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class MainPage {
 
     private  WebDriver driver;
+
+    public static final String URL_SCOOTER = "https://qa-scooter.praktikum-services.ru/";
 
         //верхняя кнопка заказа
     private final By topOrderButton = By.className("Button_Button__ra12g");
@@ -29,6 +33,10 @@ public class MainPage {
     public MainPage(WebDriver driver){
         this.driver = driver;
     }
+        //ожидание загрузки блока с вопросами
+    public void waitLoadSectionFaq() {
+        new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(sectionFaq));
+    }
 
         //соглашаемся с использованием кук
     public void clickButtonAcceptCoockie() {
@@ -45,6 +53,10 @@ public class MainPage {
         //получение текста ответа
     public String getAnswer(int itemIndex) {
         return driver.findElement(By.xpath(String.format(answer, itemIndex))).getText();
+    }
+        //получение текста вопроса
+    public String getQuestion(int itemIndex) {
+        return driver.findElement(By.xpath(String.format(question, itemIndex))).getText();
     }
 
        //нажать верхнюю или нижнюю кнопку Заказать

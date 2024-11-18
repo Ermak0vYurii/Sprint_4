@@ -1,19 +1,14 @@
-import org.junit.After;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
 import pageobject.MainPage;
 import pageobject.OrderPage;
 
 
 @RunWith(Parameterized.class)
 
-public class OrderTest {
-
-    public static WebDriver driver;
+public class OrderTest extends BaseTest {
 
     private final int indexButton;
     private final String firstName;
@@ -35,34 +30,27 @@ public class OrderTest {
         this.phoneNumber = phoneNumber;
         this.deliveryDate = deliveryDate;
         this.rentalPeriod = rentalPeriod;
-        driver = new ChromeDriver();
     }
 
     @Parameterized.Parameters
     public static Object[][] testData() {
         return new Object[][] {
+                // заказ через верхнюю кнопку(первый параметр в массиве)
                 {0, "Иван", "Зябликов", "Победы, 5", "ЗИЛ", "+79127458056", "21.11.2024", "трое суток"},
-                {1, "Петр", "Мошкин", "Ленина, 10", "Котельники", "89194814736", "20.11.2024", "сутки"}
+                {0,"Семён", "Иванов", "Озерная, 46", "Павелецкая", "89229985147", "22.11.2024", "двое суток"},
+                // заказ через нижнюю кнопку(первый параметр в массиве)
+                {1, "Петр", "Мошкин", "Ленина, 10", "Котельники", "89194814736", "20.11.2024", "сутки"},
+                {1, "Александ", "Трусов", "Первомайская, 78", "Дмитровская", "+79634411144", "23.11.2024", "четверо суток"}
         };
     }
 
     @Test
     public void orderTest() {
-        driver.get("https://qa-scooter.praktikum-services.ru/");
         MainPage objMainPage = new MainPage(driver);
-        objMainPage.clickButtonAcceptCoockie();
         objMainPage.clickOrderButton(indexButton);
         OrderPage objOrderPage = new OrderPage(driver);
         objOrderPage.setFormForWhom(firstName, lastName, address, metroStation, phoneNumber);
         objOrderPage.setFormAboutRent(deliveryDate, rentalPeriod);
         objOrderPage.waitLoadModalOrderOk();
-
-
     }
-    @After
-    public void cleanUp() {
-        driver.quit();
-    }
-
-
 }
