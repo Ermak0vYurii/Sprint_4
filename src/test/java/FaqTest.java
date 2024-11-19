@@ -3,6 +3,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import pageobject.MainPage;
+
+import java.util.concurrent.TimeUnit;
+
 import static org.junit.Assert.assertEquals;
 
 
@@ -15,8 +18,8 @@ public class FaqTest extends BaseTest {
 
     public FaqTest(int itemIndex, String questionText, String answerText) {
         this.itemIndex = itemIndex;
-        this.answerText = answerText;
         this.questionText = questionText;
+        this.answerText = answerText;
     }
 
     @Parameterized.Parameters
@@ -43,10 +46,12 @@ public class FaqTest extends BaseTest {
 
     @Test
     public void faqTest() {
+        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
 
         MainPage objMainPage = new MainPage(driver);
-        objMainPage.waitLoadSectionFaq();
+
         objMainPage.goToFaq();
+        objMainPage.waitLoadSectionFaq();
         objMainPage.clickQuestion(itemIndex);
         String actualQuestionText = objMainPage.getQuestion(itemIndex);
         String actualAnswerText = objMainPage.getAnswer(itemIndex);
