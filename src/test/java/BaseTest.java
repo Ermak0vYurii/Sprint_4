@@ -11,12 +11,21 @@ import static pageobject.MainPage.URL_SCOOTER;
 
 public class BaseTest {
 
-    public static WebDriver driver;
+    protected WebDriver driver;
+    String browser = "firefox";
+
     @Before
     public void prepare() {
+        if(browser.equalsIgnoreCase("firefox")) {
+            System.setProperty("webdriver.gecko.driver", "C:/WebDriver/bin/geckodriver.exe");
+            driver = new FirefoxDriver();
+        }
+        else if(browser.equalsIgnoreCase("chrome")) {
+            driver = new ChromeDriver();
+            WebDriverManager.chromedriver().setup();
+        }
 
-         driver = new ChromeDriver();
-        // driver = new FirefoxDriver();
+
         driver.get(URL_SCOOTER);
         MainPage objMainPage = new MainPage(driver);
         objMainPage.clickButtonAcceptCoockie();
