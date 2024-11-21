@@ -12,7 +12,7 @@ import static pageobject.MainPage.URL_SCOOTER;
 public class BaseTest {
 
     protected WebDriver driver;
-    String browser = "firefox";
+    String browser = "chrome";
 
     @Before
     public void prepare() {

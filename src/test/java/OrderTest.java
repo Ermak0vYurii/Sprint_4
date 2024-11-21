@@ -5,6 +5,8 @@ import org.junit.runners.Parameterized;
 import pageobject.MainPage;
 import pageobject.OrderPage;
 
+import static org.junit.Assert.assertTrue;
+import static pageobject.OrderPage.*;
 
 
 @RunWith(Parameterized.class)
@@ -53,5 +55,8 @@ public class OrderTest extends BaseTest {
         objOrderPage.setFormForWhom(firstName, lastName, address, metroStation, phoneNumber);
         objOrderPage.setFormAboutRent(deliveryDate, rentalPeriod);
         objOrderPage.waitLoadModalOrderOk();
+        String orderMessage = objOrderPage.getInfoMessage();
+        assertTrue("Ошибка оформления заказа", orderMessage.contains("Заказ оформлен"));
     }
+
 }

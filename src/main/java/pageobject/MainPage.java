@@ -11,6 +11,8 @@ public class MainPage {
     private  WebDriver driver;
 
     public static final String URL_SCOOTER = "https://qa-scooter.praktikum-services.ru/";
+    public static final String YANDEX_URL = "https://ya.ru/?yredirect=true";
+    public static final String INVALID_ORDER_NUMBER = "77744";
 
         //верхняя кнопка заказа
     private final By topOrderButton = By.className("Button_Button__ra12g");
@@ -28,6 +30,13 @@ public class MainPage {
     private String answer = ".//div[@id='accordion__panel-%d']";
         //кнопка согласия использования куки
     private final By buttonAcceptCoockie = By.id("rcc-confirm-button");
+        //гиперссылка статус заказа
+    private final By orderStatusButton = By.xpath(".//button[text()='Статус заказа']");
+        //поле статус заказа
+    private final By orderStatusField = By.xpath(".//div[@class='Input_InputContainer__3NykH']/input[@placeholder='Введите номер заказа']");
+        //кнопка GO!
+    private final By getOrderStatusButton = By.xpath(".//button[text()='Go!']");
+
 
 
     public MainPage(WebDriver driver){
@@ -71,6 +80,9 @@ public class MainPage {
                 break;
         }
     }
+    public void clickTopOrderButton() {
+        driver.findElement(topOrderButton).click();
+    }
 
        //клик по логотипу самоката
     public void clickLogoScooter() {
@@ -80,7 +92,18 @@ public class MainPage {
     public void clickLogoYandex() {
         driver.findElement(logoYandex).click();
     }
-
-
+        //клик по "статус заказа"
+    public void clickOrderStatusButton() {
+        driver.findElement(orderStatusButton).click();
+    }
+        //ввести номер заказа в поле статус заказа
+    public void setOrderStatus(String orderNumber) {
+        new WebDriverWait(driver,10).until(ExpectedConditions.visibilityOfElementLocated(orderStatusField));
+        driver.findElement(orderStatusField).sendKeys(orderNumber);
+    }
+        //клик по кнопке Go!
+    public void checkOrderStatus() {
+        driver.findElement(getOrderStatusButton).click();
+    }
 
 }

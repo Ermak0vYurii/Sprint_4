@@ -6,8 +6,16 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.concurrent.TimeUnit;
+
 public class OrderPage {
     private final WebDriver driver;
+    //константы
+    public static final String FIRSTNAME_ERROR = "Введите корректное имя";
+    public static final String LASTNAME_ERROR = "Введите корректную фамилию";
+    public static final String ADDRESS_ERROR = "Введите корректный адрес";
+    private static final String METRO_STATION_ERROR = "Выберете станцию";
+    public static final String PHONE_NUMBER_ERROR = "Введите корректный номер";
     //локаторы
     private final By fieldFirstName = By.xpath(".//input[@placeholder='* Имя']");
     private final By fieldLastName = By.xpath(".//input[@placeholder='* Фамилия']");
@@ -22,6 +30,9 @@ public class OrderPage {
     private final By buttonOrder = By.xpath(".//div[starts-with(@class,'Order_Buttons')]//button[contains(text(), 'Заказать')]");  //проверить локатор
     private final By buttonYes = By.xpath(".//button[text()='Да']");
     private final By headerModalOrderOk = By.xpath(".//div[text()='Заказ оформлен']");
+    private final By infoMessage = By.xpath(".//div[@class='Order_ModalHeader__3FDaJ']");
+    private final By errorMessages = By.xpath(".//div[@class='Input_ErrorMessage__3HvIb Input_Visible___syz6']");
+    private final By errorMessagesForMetro = By.xpath(".//div[text()='Выберите станцию']");
 
 
     public OrderPage(WebDriver driver) {
@@ -37,6 +48,16 @@ public class OrderPage {
         setPhoneNumber(phoneNumber);
         clickNextButton();
     }
+    //заполнение формы "для кого"
+    public void setFormForWhomError(String firstName, String lastName, String address, String phoneNumber) {
+        driver.manage().timeouts().implicitlyWait(3, TimeUnit.SECONDS);
+        setFirstName(firstName);
+        setLastName(lastName);
+        setAddress(address);
+        setPhoneNumber(phoneNumber);
+        clickNextButton();
+        clickNextButton();
+    }
     //заполнение формы "про аренду"
     public void setFormAboutRent(String deliveryDate, String rentalPeriod) {
         setDeliveryDate(deliveryDate);
@@ -45,8 +66,19 @@ public class OrderPage {
         new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(buttonYes));
         clickButtonYes();
     }
+    //получение сообщений об ошибке
+    public void checkErrorMessagesForOrderForm(String[] expectedMessages) {
+        for (int i = 0; i < expectedMessages.length; i++) {
+            assertEquals("Неверное сообщение об ошибке", expectedMessages[i], getErrorMessage(i));
+        }
+        assertEquals("Неверное сообщение об ошибке", METRO_STATION_ERROR, getErrorMessageForMetro());
+    }
 
-        //ввод данных в поле имя
+    private void assertEquals(String неверноеСообщениеОбОшибке, String expectedMessage, String errorMessage) {
+    }
+
+
+    //ввод данных в поле имя
     public void setFirstName(String firstName) {
         driver.findElement(fieldFirstName).sendKeys(firstName);
     }
@@ -100,5 +132,17 @@ public class OrderPage {
         //ожидание окна "заказ оформлен"
     public void waitLoadModalOrderOk() {
         new WebDriverWait(driver, 3).until(ExpectedConditions.visibilityOfElementLocated(headerModalOrderOk));
+    }
+
+    public String getInfoMessage() {
+        return driver.findElement(infoMessage).getText();
+    }
+
+    public String getErrorMessage(int i) {
+        return driver.findElements(errorMessages).get(i).getText();
+    }
+
+    public String getErrorMessageForMetro() {
+        return driver.findElement(errorMessagesForMetro).getText();
     }
 }
