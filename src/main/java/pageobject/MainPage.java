@@ -68,7 +68,7 @@ public class MainPage {
         return driver.findElement(By.xpath(String.format(question, itemIndex))).getText();
     }
 
-       //нажать верхнюю или нижнюю кнопку Заказать
+       //нажать верхнюю или нижнюю кнопку  Заказать
     public void clickOrderButton(int indexButton) {
         switch (indexButton) {
             case 0:
